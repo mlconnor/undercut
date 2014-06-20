@@ -3,6 +3,7 @@
 var _ = require('underscore');
 var undercut = require('../lib/undercut.js');
 var underscoreString = require('underscore.string');
+var validator = require('validator');
 
 /*
   ======== A Handy Little Nodeunit Reference ========
@@ -28,16 +29,46 @@ exports.undercut = {
   setUp: function(done) {
     // setup here
     _.mixin(undercut.filterMixins(_, underscoreString, ["startsWith", "endsWith"]));
+    _.mixin(undercut.filterMixins(_, validator, [
+      "contains",
+      "matches",
+      "isDivisibleBy",
+      "isLength",
+      "isDate",
+      "isAfter",
+      "isBefore",
+      "isNull",
+      "isIn"
+    ]));
     //console.log(_);
+    console.log('ev match', _.everyMatches(['abc','cbc','fbz'], "\\Sb\\S"));
     done();
   },
   'no args': function(test) {
   //  test.expect(1);
     // tests here
 
-    test.deepEqual(_.filterStartsWith(['abc','def','axl'], 'a'), ['abc','axl'], "should be ['abc','alx']");
-    test.deepEqual(_.filterEndsWith(['abc','def','axl'], 'l'), ['axl'], "should be ['axl']");
-    test.deepEqual(_.filterEndsWith(['abc',null,'axl'], 'l'), ['axl'], "should be ['axl']");
+    test.deepEqual(_.filterStartsWith(['abc','def','axl'], 'a'), ['abc','axl']);
+    test.deepEqual(_.filterEndsWith(['abc','def','axl'], 'l'), ['axl']);
+    test.deepEqual(_.filterEndsWith(['abc',null,'axl'], 'l'), ['axl']);
+
+    test.ok       (_.everyContains(['abc','dadf','axl'], 'a'));
+    test.deepEqual(_.filterContains(['abc','dadf','axl'], 'z'), []);
+    test.ok       (_.everyMatches  (['abc','cbc','fbz'], "\\Sb\\S"));
+    test.ok       (_.someMatches   (['zzz','cbc','zzz'], "\\Sb\\S"));
+    test.deepEqual(_.filterMatches (['zzz','cbc','zzz'], "z+"), ['zzz','zzz']);
+    test.deepEqual(_.filterIsDivisibleBy ([11,12,13,14,15], 3), [12,15]);
+    test.deepEqual(_.filterIsLength(["a","abc","defg"], 4), ["defg"]);
+    test.ok       (! _.everyIsDate   (["1/23/1996", "2/11/2004", "foo"]));
+    test.ok       (_.everyIsDate   (["1/23/1996", "2/11/2004", "6/12/2012"]));
+    test.deepEqual(_.rejectIsNull  ([1,2,3,true,null]), [1,2,3,true]);
+    test.ok       (_.everyIsBefore (["1/10/2014","2/12/2014"], new Date()));
+    test.ok       (_.everyIsAfter  (["1/10/2030","2/12/2030"], new Date()));
+    test.ok       (_.everyIsIn     (["CA","GA","OH"], ["AL","AK","GA","OH","CA","FL","MI"]));
+    test.ok       (_.someIsIn      (["YY","XX","OH"], ["AL","AK","GA","OH","CA","FL","MI"]));
+    test.deepEqual(_.filterIsIn    (["YY","XX","OH"], ["AL","AK","GA","OH","CA","FL","MI"]), ["OH"]);
     test.done();
   }
 };
+
+
