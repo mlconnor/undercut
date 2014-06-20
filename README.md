@@ -20,7 +20,7 @@ _(Coming soon)_
 
 ```js
 var _ = require('underscore'),
-    validator = require('validator),
+    validator = require('validator'),
     undercut = require('undercut');
 
 _.mixin(undercut.filterMixins(_, underscoreString, ["startsWith", "endsWith"]));
