@@ -3,11 +3,14 @@
 Undercut allows you to build mixins such as everyStartsWith and filterEndsWith into underscore.  It is made for people who are generally lazy and love terse code.
 
 ## Getting Started
-Install the module with: `npm install undercut`
+Install the module with: `git clone https://github.com/mlconnor/undercut`
 
 ```javascript
-var undercut = require('undercut');
-undercut.awesome(); // "awesome"
+var _ = require('underscore'),
+    validator = require('validator),
+    undercut = require('undercut');
+
+_.mixin(undercut.filterMixins(_, underscoreString, ["startsWith", "endsWith"]));
 ```
 
 ## Documentation
