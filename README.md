@@ -7,7 +7,7 @@ Install the module with: `git clone https://github.com/mlconnor/undercut`
 
 ```javascript
 var _ = require('underscore'),
-    validator = require('validator),
+    validator = require('validator'),
     undercut = require('undercut');
 
 _.mixin(undercut.filterMixins(_, underscoreString, ["startsWith", "endsWith"]));
