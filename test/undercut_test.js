@@ -40,8 +40,8 @@ exports.undercut = {
       "isNull",
       "isIn"
     ]));
+    _.mixin(undercut.mapMixins(_, _, [ 'omit', 'pluck' ]));
     //console.log(_);
-    console.log('ev match', _.everyMatches(['abc','cbc','fbz'], "\\Sb\\S"));
     done();
   },
   'no args': function(test) {
@@ -67,6 +67,10 @@ exports.undercut = {
     test.ok       (_.everyIsIn     (["CA","GA","OH"], ["AL","AK","GA","OH","CA","FL","MI"]));
     test.ok       (_.someIsIn      (["YY","XX","OH"], ["AL","AK","GA","OH","CA","FL","MI"]));
     test.deepEqual(_.filterIsIn    (["YY","XX","OH"], ["AL","AK","GA","OH","CA","FL","MI"]), ["OH"]);
+ 
+    test.deepEqual(_.mapOmit       ([{'foo':1,'bar':2},{'foo':false, 'bar':3, 'baz':false}],['bar','baz']), [ { foo: 1 }, { foo: false } ] );
+
+
     test.done();
   }
 };
